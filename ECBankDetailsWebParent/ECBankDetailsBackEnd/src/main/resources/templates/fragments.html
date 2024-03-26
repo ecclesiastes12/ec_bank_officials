@@ -1,0 +1,65 @@
+<!DOCTYPE html> 
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="page_head(title,remove)" th:remove="${remove}">
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>[[${title}]]</title>
+	<link rel="icon" type="image/x-icon" th:href="@{/favicon.ico}"/>
+	
+	<link th:rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/5.2.3/css/bootstrap.min.css}"> 
+	<script type="text/javascript" th:src="@{/webjars/bootstrap/5.2.3/js/bootstrap.min.js}"></script>
+	<link th:rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+	<link th:rel="stylesheet" type="text/css" th:href="@{/css/table.css}">
+	<link th:rel="stylesheet" type="text/css" th:href="@{/css/arrow_icon.css}">
+	<link th:rel="stylesheet" type="text/css" th:href="@{/css/custom_modal.css}">
+	<link th:rel="stylesheet" type="text/css" th:href="@{/css/menu_navigation.css}">
+	<script type="text/javascript" th:src="@{/webjars/jquery/3.6.3/jquery.min.js}"></script>
+	<link rel="stylesheet" th:href="@{/webjars/font-awesome/6.5.1/css/all.min.css}" />
+	
+	<script defer th:src="@{/js/common_list.js}"></script>
+</head>
+<body>
+	<!-- header nav -->
+	
+	<header th:fragment="header">
+		<nav class="section-header">
+			<div class="img-logo">
+			<img  th:src="@{/images/favicon.ico}"/>
+			</div>
+			<div  class="nav-link">
+				<i class="fa-solid fa-house"></i>
+			<a  href="#">Home</a></div>
+			<div  class="nav-link ">
+			<i class="fa-regular fa-user"></i>
+			<a th:href="@{/users}">Users</a></div>
+			<div  class="nav-link">
+			<i class="fa-solid fa-money-check"></i>
+			<a th:href="@{/bankdetails}">BankDetails</a></div>
+			<div  class="nav-link">
+			<i class="fa-solid fa-building"></i>
+			<a th:href="@{/districts}">Districts</a></div>
+			<div  class="nav-link">
+			<i class="fa-solid fa-flag"></i>
+			<a  th:href="@{/officers}">Officers</a></div>
+			<div  class="nav-link">
+			<i class="fa-solid fa-address-card"></i>
+			<a  th:href="@{/positions}">Position</a></div>
+			
+			
+		</nav>
+	</header>
+	
+	
+	
+	<!-- fragment for page footer -->
+	<div th:fragment="footer" class="footer">
+		<p>Ec Control Panel - Copyright &copy; ECBank</p>
+	</div>
+
+<a th:fragment="page_link(pageNum, label)"
+		class="page-link" 
+		th:href="@{${moduleURL} + '/page/' + ${pageNum} }">[[${label}]]</a>
+
+ <script th:src="@{/js/common_list.js}"></script>
+</body>
+</html>

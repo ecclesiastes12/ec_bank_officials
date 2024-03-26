@@ -1,0 +1,67 @@
+
+.container {
+  position: relative;
+}
+
+.back-arrow-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.fa-arrow-left {
+  font-size: 24px; /* adjust the size as needed */
+  color: #333; /* icon color */
+}
+
+.spiral {
+  position: absolute;
+  width: 24px; /* same as icon size */
+  height: 24px; /* same as icon size */
+  border: 2px solid transparent;
+  border-top-color: #3498db; /* initial color of the spiral */
+  border-radius: 50%;
+  animation: spin 2s linear infinite, color-change 2s infinite alternate;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes color-change {
+  0% {
+    border-top-color: #3498db;
+  }
+  100% {
+    border-top-color: #e74c3c; /* color when hovered */
+  }
+}
+
+/* Add hover effect on the back-arrow-container */
+.back-arrow-container:hover .spiral {
+  animation: spin-hover 0.5s linear infinite;
+}
+
+.back-arrow-container:hover .fa-arrow-left {
+  transform: scale(1.5); /* Scale the icon on hover */
+}
+
+.back-arrow-container:hover .spiral {
+  opacity: 1; /* Show the spiral on hover */
+}
+@keyframes spin-hover {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

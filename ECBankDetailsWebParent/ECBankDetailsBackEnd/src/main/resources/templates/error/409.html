@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('User Form','none')}">
+</head>
+<body>
+	<div class="container">
+		<div class="back-arrow-container">
+		<i class="fa-solid fa-arrow-left"></i>
+			<div ><a th:href="@{/users}" class="moving-circle"></a></div>
+		</div>
+		<h2 class="title">[[${pageTitle}]]</h2>
+		
+		<p  class="mb-6">Somebody else has edited the same thing as you.
+Please reload the
+page and redo your edit.</p>
+	</div>
+	
+</body>
+</html>
+
+

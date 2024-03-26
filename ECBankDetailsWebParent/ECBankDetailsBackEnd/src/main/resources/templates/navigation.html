@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Users','none')">
+<title>[[${title}]]</title>
+</head>
+<body>
+
+	<header th:fragment="menu">
+	
+		<!-- Hidden form for logout -->
+		<form th:action="@{/logout}" method="post" name="logoutForm" th:hidden="true">
+			<input type="submit" />
+		</form>
+		
+		<nav class="nav-logout">
+			<nav class="nav-logout">
+			<div class="back-icon "><a th:href="@{/}" class="fa-solid fa-arrow-left-long fa-2x"></a></div>
+			<div class="logout"><a href="" id="logoutLink" onclick="logout()">Logout</a></div>
+		</nav>
+		</nav>
+	</header>
+	
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Users','none')">
+<title>[[${title}]]</title>
+</head>
+<body>
+	<div class="container">
+		<header th:replace="navigation :: header"></header>
+		<h3 class="title">[[${pageTitle}]]</h3>
+
+		<div>
+			<div class="addAndNotificaion">
+				<div class="flex-1">
+					<a th:href="@{/registration/new}">
+						<button class="fa-regular fa-user btn btn-hipster"></button>
+					</a>
+					<a th:href="@{/officers/export/excel}"> Export to Excel</a>
+				</div>
+				<div th:if="${message != null}" class="alert alert-success  flex-2">
+					[[${message}]]
+				</div>
+			</div>
+			
+			 <div class="search-bar">
+                <input type="text" class="form-input" onfocus="handleFocus()" onblur="handleBlur()">
+                <button class="btn">Search</button>
+            </div>
+		</div>		<div class="full-details">
+			<table>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>Last Name</th>
+					<th>Other Names</th>
+					<th class="hideable-column">Email</th>
+					<th>District</th>
+					<th>ID Card</th>
+					<th>Status</th>
+					<th>Phone Number</th>
+					
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="officer : *{listOfficers}">
+					<td>[[${officer.id}]]</td>
+					<td>[[${officer.lastName}]]</td>
+					<td>[[${officer.otherName}]]</td>
+					<td class="hideable-column">[[${officer.email}]]</td>
+					<td >[[${officer.district.name}]]</td>
+					<td>[[${officer.identityCard}]]</td>
+					<td class="status">
+						<a th:if="${officer.enabled == true}" class="fa-solid fa-toggle-on fa-2x"
+						   th:href="@{'/officers/' + ${officer.id} + '/enabled/false'}" 
+						   
+						   title="Disabled this user"></a>
+						   <a th:if="${officer.enabled == false}" class="fa-solid fa-toggle-off fa-2x"
+						   th:href="@{'/officers/' + ${officer.id} + '/enabled/true'}" 
+						   
+						   title="Enabled this user"></a>
+					</td>
+					<td>[[${officer.phoneNumber}]]</td>
+					<td class="table-action">
+<!-- 						<div> -->
+<!-- 							<a class="fa-regular fa-pen-to-square edit" th:href="@{'/officers/edit/' +${officer.id}}"></a> -->
+<!-- 						</div> -->
+						<div>
+							<a class="fa-solid fa-trash delete"></a>
+						</div>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		</div>
+		
+		<div class="less-details ">
+			<div  th:each="officer : *{listOfficers}" class="responsive-table" >
+				<div class="table-header" >
+					<div class="info">Full Name</div>
+					<div class="info">Identity Card #</div>
+					<div class="info">Phone #</div>
+					<div class="info">Status</div>
+					<div class="info">Action</div>
+				</div>	
+				<div class="table-row">
+					<div class="fName">[[${officer.fullName}]]</div>
+					<div class="iden">[[${officer.identityCard}]]</div>
+					<div class="phonNum">[[${officer.phoneNumber}]]</div>
+					<div><a th:if="${officer.enabled == true}" class="fa-solid fa-toggle-on fa-2x"
+					   th:href="@{'/officers/' + ${officer.id} + '/enabled/false'}" 
+					   title="Disabled this user"></a>
+					   <a th:if="${officer.enabled == false}" class="fa-solid fa-toggle-off fa-2x"
+					   th:href="@{'/officers/' + ${officer.id} + '/enabled/true'}" 
+					   title="Enabled this user"></a></div>
+					   <div class="table-action" >
+							<a class="fa-regular fa-pen-to-square fa-2x edit" th:href="@{'/officer/edit/' +${officer.id}}"></a>
+							<a class="fa-solid fa-trash fa-2x delete"></a>
+						
+					</div>
+				</div>
+					
+			</div>
+		</div>
+		
+		<div th:replace="page_pagination :: pagination"></div>
+	</div>
+	
+	 <script>
+	 	$(document).ready(function(){
+	 		logout("#logoutLink");
+	 	})
+	 
+        function handleFocus() {
+            document.querySelector('.search-bar').classList.add('focused');
+        }
+
+        function handleBlur() {
+            document.querySelector('.search-bar').classList.remove('focused');
+        }
+    </script>
+</body>
+</html>
+

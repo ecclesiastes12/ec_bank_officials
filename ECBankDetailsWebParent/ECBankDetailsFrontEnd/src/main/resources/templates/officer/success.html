@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('login','none')">
+</head>
+<body class="page-body">
+	
+<!--   	<div th:replace="fragments/sidebar"></div> -->
+	<div class="container ">
+	
+		<p>User registration successful! You can now login and continue the registration process</p>
+		
+		<div>
+			<a th:href="@{/login}" class="btn">Login</a>
+		</div>
+		
+		<div th:replace="fragments :: footer"></div>
+	</div>
+	
+</body>
+</html>

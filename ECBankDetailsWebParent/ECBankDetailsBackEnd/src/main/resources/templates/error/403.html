@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('User Form','none')}">
+</head>
+<body>
+	<div class="container">
+		
+		
+		<div class="svg-img">
+			<img th:src="@{/images/svg/403.svg}" alt="403 forbidden error svg"  />
+		</div>
+		<div class="svg-error-text">
+		<h3 class="svg-error-header">We are sorry ...</h3>
+		<p class="svg-error-paragraph">The page you're trying to access has restricted access. Please refer to your system administrator</p>
+		<a class="btn svg-error-button" th:href="@{/}">
+		Go Back</a></div>
+	</div>
+	
+</body>
+</html>
+
+

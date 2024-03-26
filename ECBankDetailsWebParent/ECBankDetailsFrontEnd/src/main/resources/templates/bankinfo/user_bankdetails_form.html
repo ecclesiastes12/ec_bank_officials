@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('User Form','none')}">
+</head>
+<body>
+	<div class="container">
+		<div class="back-arrow-container">
+		<i class="fa-solid fa-arrow-left"></i>
+			<div ><a th:href="@{/bankinfo}" class="moving-circle"></a></div>
+		</div>
+		<h2 class="title">[[${pageTitle}]]</h2>
+		<form  class="form-container" th:action="@{/bankinfo/save}" method="post"  th:object="${bankInfo}">
+			
+			<input type="hidden" th:field="*{id}"/>
+			
+			<div  class="form-row">
+				<div class="form-column">
+					<label class="form-label">First Name</label> <input type="text"
+						class="form-input"   th:field="*{firstName}" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Last Name</label> <input type="text"
+						class="form-input" th:field="*{lastName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">Account Number</label> <input type="text"
+						class="form-input"   th:field="*{accountNumber}"  required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Bank Name</label> <input type="text"
+						class="form-input"   th:field="*{bankName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+				<label class="form-label">Bank Branch:</label>
+					<input type="text"  th:field="*{branch}" class="form-input"
+					   required="required"/>
+				
+			</div>
+			
+			</div>
+			
+			
+			<div class="btn-block ">
+<!-- 				<input type="submit" class="btn" value="save" /> -->
+				<div class="btn-block">
+			       <button type="submit" class="btn">Save</button>
+			        <a type="submit" th:href="@{/bankinfo}"  class="btn">Cancel</a>
+			    </div>
+			</div>
+			
+		</form>
+	</div>
+	
+	
+	<!-- Preview Modal -->
+   
+<script th:src="@{js/common_list.js}"></script>
+</body>
+</html>

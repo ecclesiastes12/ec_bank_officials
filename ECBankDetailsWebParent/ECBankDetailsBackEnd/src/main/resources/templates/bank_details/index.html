@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Users','none')">
+<title>[[${title}]]</title>
+</head>
+<body>
+	<div class="container">
+	<header th:replace="navigation :: header"></header>
+		<h3 class="title">[[${pageTitle}]]</h3>
+
+		<div>
+			<a th:href="@{/bankdetails/new}">
+				<button class="fa-solid fa-user-plus btn btn-hipster"></button>
+			</a>
+			<div th:if="${message != null}" class="alert alert-success">
+				[[${message}]]
+			</div>
+		</div>
+		<div >
+			<table>
+			<thead>
+				<tr >
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th>Account Number</th>
+					<th>Bank Name</th>
+					<th>Bank Branch</th>
+					
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="bankdetail : ${listBankInfo}">
+					<td>[[${bankdetail.id}]]</td>
+					<td>[[${bankdetail.firstName}]]</td>
+					<td>[[${bankdetail.lastName}]]</td>
+					<td>[[${bankdetail.accountNumber}]]</td>
+					<td>[[${bankdetail.bankName}]]</td>
+					<td>[[${bankdetail.branch}]]</td>
+					<td class="table-action">
+						<div>
+							<a class="fa-regular fa-pen-to-square edit" th:href="@{'/bankdetails/edit/' + ${bankdetail.id}}"></a>
+						</div>
+						<div>
+							<a
+								th:href="@{'/bankdetails/delete/' + ${bankdetail.id}}"	
+								th:entityId="${bankdetail.id}" th:fullName="${bankdetail.fullName}"
+								class="fa-solid fa-trash delete link-delete"
+							></a>
+						</div>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		</div>
+		
+<!-- 		<div class="less-details"> -->
+<!-- 			<div  > -->
+<!-- 			<div class="less-details-container"> -->
+<!-- 				<div class="less-details-row"> -->
+<!-- 					<div class="less-details-column userInfo" > -->
+<!-- 					<div><b>User Information</b></div> -->
+						
+<!-- 					</div> -->
+				
+<!-- 					<div class="less-details-column userStatus"> -->
+					
+<!-- 					<div class="less-details-column userAction" > -->
+<!-- 					<div><b>Action</b></div> -->
+<!-- 						<div> -->
+<!-- 							<a class="fa-regular fa-pen-to-square fa-2x edit" th:href="@{'/users/edit/' }"></a> -->
+<!-- 						</div> -->
+<!-- 						<div> -->
+<!-- 							<a class="fa-solid fa-trash fa-2x delete"></a> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+			
+			
+<!-- 		</div> -->
+ 	</div>
+ 	<div class="modal fade text-center" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" >Delete Confirmation</h4>
+					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">Yes</a>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+ 	<script type="text/javascript">
+ 		$(document).ready(function(){
+ 			logout("#logoutLink");
+ 			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				link = $(this);
+				showDeleteConfirmModal(link, 'Bank Information');
+				
+				
+				
+			});
+
+//  			 function showDeleteConfirmModal(link) {
+//             var entityId = link.attr("th:entityId");
+//             var entityName = "subject"; // Update with your actual entity name
+
+//             $("#yesButton").attr("href", link.attr("href"));
+//             $("#confirmText").text("Are you sure you want to delete " + entityName + " ID " + entityId + " ?");
+
+//             $("#confirmModal").modal("show");
+//        }
+ 		});
+ 	
+ 	</script>
+ 	<script th:src="@{/js/common_list.js}"></script>
+</body>
+</html>

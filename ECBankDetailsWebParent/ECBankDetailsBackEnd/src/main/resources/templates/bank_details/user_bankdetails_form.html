@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('User Form','none')}">
+</head>
+<body>
+	<div class="container">
+		<div class="back-arrow-container">
+		<i class="fa-solid fa-arrow-left"></i>
+			<div ><a th:href="@{/bankdetails}" class="moving-circle"></a></div>
+		</div>
+		<h2 class="title">[[${pageTitle}]]</h2>
+		<form id="bankInfoForm" class="form-container" th:object="${bankInfo}">
+			
+			<input type="hidden" th:field="*{id}"/>
+			
+			<div  class="form-row">
+				<div class="form-column">
+					<label class="form-label">First Name</label> <input type="text"
+						class="form-input"   th:field="*{firstName}" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Last Name</label> <input type="text"
+						class="form-input" th:field="*{lastName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">Account Number</label> <input type="text"
+						class="form-input"   th:field="*{accountNumber}"  required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Bank Name</label> <input type="text"
+						class="form-input"   th:field="*{bankName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+				<label class="form-label">Bank Branch:</label>
+					<input type="text"  th:field="*{branch}" class="form-input"
+					   required="required"/>
+				
+			</div>
+			
+			</div>
+			
+			
+			<div class="btn-block ">
+<!-- 				<input type="submit" class="btn" value="save" /> -->
+				<div class="btn-block">
+			       <button type="button" class="btn" onclick="previewFormData()">Preview</button>
+			        <a type="button" th:href="@{/bankdetails}"  class="btn">Cancel</a>
+			    </div>
+			</div>
+			
+		</form>
+	</div>
+	
+	
+	<!-- Preview Modal -->
+    <div th:replace="bank_details/preview :: preview_bank_info"></div>
+	
+<script>
+ contextPath = "[[@{/}]]";
+ requestURL = contextPath + "bankdetails/save";
+$(document).ready(function() {
+   
+
+    // Handle Save button click in preview modal
+    $('#previewModal').on('click', '.btn-primary', function() {
+        // Serialize form data from the original form
+        var formData = $('#bankInfoForm').serialize();
+      
+        // AJAX request to save form data to the database
+        $.ajax({
+            url: requestURL,
+            type: 'POST',
+            data: formData,
+            success: function(response) {
+                // Redirect or handle success as needed
+                window.location.href = '/bankdetails'; // Redirect to the desired page
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+            
+          
+        });
+    });
+});
+
+	
+function previewFormData() {
+    var firstName = $('#firstName').val();
+    var lastName = $('#lastName').val();
+    var accountNumber = $('#accountNumber').val();
+    var bankName = $('#bankName').val();
+    var branch = $('#branch').val();
+    
+    requestData = {"firstName" : firstName, "lastName" : lastName, "accountNumber":accountNumber,
+    		"bankName": bankName, "branch":branch}
+
+    // Populate modal fields
+    $('#previewFirstName').text(firstName);
+    $('#previewLastName').text(lastName);
+    $('#previewAccountNumber').text(accountNumber);
+    $('#previewBankName').text(bankName);
+    $('#previewBranch').text(branch);
+
+ //Set the action attribute of the form
+   
+ 
+    // Show the modal
+    $('#previewModal').modal('show');
+    
+   
+}
+
+
+</script>
+<script th:src="@{js/common_list.js}"></script>
+</body>
+</html>

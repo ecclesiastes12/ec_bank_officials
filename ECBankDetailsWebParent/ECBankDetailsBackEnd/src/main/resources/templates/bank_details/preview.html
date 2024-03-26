@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+
+<div th:fragment="preview_bank_info" class="modal fade" id="previewModal" tabindex="-1" aria-labelledby="previewModalLabel" >
+<form   th:action="@{/bankdetails/save}" method="post" >
+<div class="modal-dialog" >
+    <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" >Bank Information Preview</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+        	
+        	<div class="bank_details">
+        		<p><strong>First Name:</strong></p>
+        		<p> <span id="previewFirstName"></span></p>
+        		<p><strong>Last Name:</strong> </p>
+	            <p><span id="previewLastName"></span></p>
+	            <p><strong>Account Number:</strong> </p>
+	            <p><span id="previewAccountNumber"></span></p>
+	            <p><strong>Bank Name:</strong></p>
+	            <p> <span id="previewBankName"></span></p>
+	            <p><strong>Bank Branch:</strong></p>
+	            <p> <span id="previewBranch"></span></p>
+        	</div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+             <button type="submit" class="btn btn-primary" >Save</button>
+           
+        </div>
+    </div>
+</div>
+</form>
+</div>
+</body>
+</html>

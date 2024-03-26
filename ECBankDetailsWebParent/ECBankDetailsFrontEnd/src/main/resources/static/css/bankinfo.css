@@ -1,0 +1,42 @@
+
+.section-details {
+	position:relative;
+	
+	
+}
+
+
+.myimg {
+	position:absolute;
+	top:0%;
+	left:37%;
+	width:8rem;
+	height:8rem;
+	
+	display:absolute;
+	transform:translate(0%,-50%);
+	border-radius:50%;
+	box-shadow: var(--shadow-1)
+	
+}
+
+.bank-info{
+	position:absolute;
+	top: 35%;
+	left:25%;
+	
+	display: grid;
+	grid-template-columns:repeat(2,1fr);
+	
+	justify-content: center;
+	gap:0 0.8rem;
+}
+
+.bank-info span{
+	justify-self:end;
+	color: var(--grey-500);
+}
+
+.bank-info p{
+	justify-self:start;
+}

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Users','none')">
+<title>[[${title}]]</title>
+</head>
+<body>
+	<div class="container">
+	<header th:replace="navigation :: header"></header>
+		<h3 class="title">[[${pageTitle}]]</h3>
+			<!-- Display User District Information -->
+    <div th:if="${listByDistrictId != null && listByDistrictId.size() > 0}">
+        <p th:text="'User District: ' + ${listByDistrictId[0].district.name}"
+         class="text-center fw-bold fs-1"></p>
+    </div>
+		<div>
+			<div class="addAndNotificaion">
+				<div class="flex-1">
+					<a th:href="@{/users/new}">
+						<button class="fa-regular fa-user btn btn-hipster"></button>
+					</a>
+				</div>
+				<div th:if="${message != null}" class="alert alert-success  flex-2">
+					[[${message}]]
+				</div>
+			</div>
+			
+			 <div class="search-bar">
+                <input type="text" class="form-input" onfocus="handleFocus()" onblur="handleBlur()">
+                <button class="btn">Search</button>
+            </div>
+		</div>
+		<div class="full-details">
+			<table>
+			<thead>
+				<tr>
+					<th>#</th>
+					<th>First Name</th>
+					<th>Last Name</th>
+					<th class="hideable-column">Email</th>
+					<th>ID Card</th>
+					<th>Role</th>
+					<th>Status</th>
+					<th>Phone Number</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="user : *{listByDistrictId}">
+					<td>[[${user.id}]]</td>
+					<td>[[${user.firstName}]]</td>
+					<td>[[${user.lastName}]]</td>
+					<td class="hideable-column">[[${user.email}]]</td>
+					<td>[[${user.identityCard}]]</td>
+					<td class="text-wrap">[[${user.roles}]]</td>
+					<td>
+						<a th:if="${user.enabled == true}" class="fa-solid fa-toggle-on"
+						   th:href="@{'/users/' + ${user.id} + '/enabled/false'}" 
+						   style="transform: scale(2)"
+						   title="Disabled this user"></a>
+						   <a th:if="${user.enabled == false}" class="fa-solid fa-toggle-off"
+						   th:href="@{'/users/' + ${user.id} + '/enabled/true'}" 
+						   style="transform: scale(2)"
+						   title="Enabled this user"></a>
+					</td>
+					<td>[[${user.phoneNumber}]]</td>
+					<td class="table-action">
+						<div>
+							<a class="fa-regular fa-pen-to-square edit" th:href="@{'/users/edit/' +${user.id}}"></a>
+						</div>
+						<div>
+							<a class="fa-solid fa-trash fa-2x delete link-delete"
+							th:href="@{'/users/delete/' +${user.id}}"
+							th:entityId="${user.id}" 
+							th:fullName="${user.fullName}"></a>
+						</div>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		</div>
+		
+		<div class="less-details ">
+			<div  th:each="user : *{listByDistrictId}" class="responsive-table" >
+				<div class="table-header" >
+					<div class="info">Full Name</div>
+					<div class="info">Identity Card #</div>
+					<div class="info">Phone #</div>
+					<div class="info">Status</div>
+					<div class="info">Action</div>
+				</div>	
+				<div class="table-row">
+					<div class="fName">[[${user.fullName}]]</div>
+					<div class="iden">[[${user.identityCard}]]</div>
+					<div class="phonNum">[[${user.phoneNumber}]]</div>
+					<div><a th:if="${user.enabled == true}" class="fa-solid fa-toggle-on fa-2x"
+					   th:href="@{'/users/' + ${user.id} + '/enabled/false'}" 
+					   title="Disabled this user"></a>
+					   <a th:if="${user.enabled == false}" class="fa-solid fa-toggle-off fa-2x"
+					   th:href="@{'/users/' + ${user.id} + '/enabled/true'}" 
+					   title="Enabled this user"></a></div>
+					   <div class="table-action" >
+							<a class="fa-regular fa-pen-to-square fa-2x edit" th:href="@{'/users/edit/' +${user.id}}"></a>
+							<a class="fa-solid fa-trash fa-2x delete link-delete"
+							th:href="@{'/users/delete/' +${user.id}}"
+							th:entityId="${user.id}" 
+							th:fullName="${user.fullName}"></a>
+						
+					</div>
+				</div>
+					
+			</div>
+		</div>
+		<div th:replace="page_pagination :: pagination"></div>
+	</div>
+	
+	<div class="modal fade text-center" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" >Delete Confirmation</h4>
+					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">Yes</a>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type="text/javascript">
+ 		$(document).ready(function(){
+ 			//logout function call
+ 			logout("#logoutLink");
+ 			
+ 			//delete function
+ 			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				link = $(this);
+				showDeleteConfirmModal(link, 'user');
+
+			});
+ 			
+ 			
+ 		});
+ 	
+ 		
+ 		 function handleFocus() {
+             document.querySelector('.search-bar').classList.add('focused');
+         }
+
+         function handleBlur() {
+             document.querySelector('.search-bar').classList.remove('focused');
+         }
+ 
+    </script>
+    
+</body>
+</html>

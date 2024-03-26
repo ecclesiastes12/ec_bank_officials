@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="~{fragments :: page_head('login','none')}">
+</head>
+<body class="page-body">
+	
+<!--   	<div th:replace="fragments/sidebar"></div> -->
+	<div class="container ">
+	<!-- Hidden form for logout -->
+		<form th:action="@{/logout}" method="post" name="logoutForm" th:hidden="true">
+			<input type="submit" />
+		</form>
+		
+		
+			<nav class="nav-logout">
+			<div class="logout"><a href="" id="logoutLink" onclick="logout()">Logout</a></div>
+		</nav>
+		<h2> Officers page</h2>
+		
+		
+		<section class="section-officer">
+		<th:block th:if="${listBankInfo != null}">
+			<div>
+				 <img class="myimg" alt="avator" th:src="@{/images/spr.jpg}">
+			</div>	
+			
+			<div th:each="bankdetail : ${listBankInfo}" class="bank-info">
+					
+				
+				 	<span>Bank Name :</span><p>[[${bankdetail.bankName}]]</p>
+				
+				
+				 	<span>Bank Branch :</span> <p>[[${bankdetail.branch}]]</p>
+				
+				 
+				 	<span>Account Name :</span> <p>[[${bankdetail.fullName}]]</p>
+				 
+				
+				 	<span>Account Number :</span> <p>[[${bankdetail.accountNumber}]]</p>
+				 
+				 	<span>Action :</span> <p><a class="fa-regular fa-pen-to-square edit" th:href="@{'/bankinfo/edit/' +${bankdetail.id}}" title="Edit officer bank information"></a></p>
+			</div>	
+		</th:block>
+		<th:block th:unless="${listBankInfo != null}">
+		
+		<h3>No Account details provided</h3>
+			
+			<p>Click on the button below to provide bank details</p>
+			<a th:href="@{/bankinfo/new}">
+				<input type="button" class="btn " value="Bank Details" />
+			</a>
+			</th:block>	
+		
+		</section>
+		
+		<div th:replace="~{fragments :: footer}"></div>
+	</div>
+	<script>
+	$(document).ready(function(){
+ 		logout("#logoutLink");
+ 	})
+ 	</script>
+ 	<script th:src="@{/js/common_list.js}"></script>
+</body>
+</html>

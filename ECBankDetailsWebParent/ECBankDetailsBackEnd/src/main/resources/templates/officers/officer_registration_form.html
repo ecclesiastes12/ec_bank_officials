@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head  th:replace="fragments :: page_head('EC Officials','none')">
+</head>
+<body>
+	<div class="container">
+		<h2>Officer Registration Form</h2>
+		
+		<section class="section-home">
+			<form class="form-container" th:action="@{/officers/save}" method="post" th:object="${officer}" 
+		onsubmit="return checkEmailUnique(this);">
+		
+			<input type="hidden" th:field="*{id}"/>
+			<!-- for optimistic locking -->
+			<input type="hidden" th:field="*{version}"/>
+			
+			<div  class="form-row">
+				<div class="form-column">
+					<label class="form-label">Select District</label>
+					<select class="form-input " th:field="*{district}">
+						<th:block  th:each="district : ${listDistricts}">
+							<option th:value="${district.id}">[[${district.name}]]  -- [[${district.region}]]</option>
+						</th:block>
+					</select>
+				</div>
+				
+			</div>
+			<div  class="form-row">
+				
+				<div class="form-column">
+					<label class="form-label">Last Name</label> <input type="text"
+						class="form-input" th:field="*{lastName}" required="required"/>
+				</div>
+				
+				<div class="form-column">
+					<label class="form-label">Other Name</label> <input type="text"
+						class="form-input"  th:field="*{otherName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">ID Card</label> <input type="text"
+						class="form-input"  th:field="*{identityCard}" placeholder="Ghana Card or Voter's Id Number" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Email</label> <input type="email"
+						class="form-input"  th:field="*{email}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+				<label class="form-label">Password:</label>
+					<input th:if="${officerForm.id == null}" type="password" th:field="*{password}" class="form-input " 
+					  minlength="8" maxlength="20" required="required" 
+					  oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"/>
+					  
+					  <input th:if="${officerForm.id != null}" type="password" th:field="*{password}" class="form-input" 
+					  placeholder="Leave blank if you don't want to change password" 
+					  minlength="8" maxlength="20" 
+					  oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"/>
+			</div>
+			<div class="form-column">
+				<label class="form-label">Confirm Password:</label>
+					<input type="password" id="confirmPassword"
+					 class="form-input " minlength="8" maxlength="20"
+					 oninput="checkPasswordMatch(this);"/>
+			</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">Phone Number</label> <input type="text"
+						class="form-input"  th:field="*{phoneNumber}" required="required"/>
+				</div>
+				
+			</div>
+			
+			
+			<div class="btn-block ">
+				<input type="submit" class="btn btn-primary" value="save" />
+				<a type="submit" th:href="@{/}"  class="btn btn-cancel">Cancel</a>
+			</div>
+			
+		</form>
+		
+		</section>
+		<div th:insert="fragments :: toast_fragment"></div>
+		
+		<div th:replace="fragments :: footer"></div>	
+			
+			
+		
+		
+	</div>
+	
+	<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <span id="modalBody"></span>
+            </div>
+
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+	<script type="text/javascript">
+//function to check password match
+// 	function checkPasswordMatch(confirmPassword){
+// 		var passwordInput = document.querySelector("input[name='password']");
+// 		if(confirmPassword.value !== passwordInput.value){
+// 			confirmPassword.setCustomValidity("Password do not match!");
+// 		}else{
+// 			confirmPassword.setCustomValidity("");
+// 		}
+	
+// 	}
+
+function checkPasswordMatch(confirmPassword){
+ 		if(confirmPassword.value != $("#password").val()){
+ 			confirmPassword.setCustomValidity("Password do not match!");
+ 		}else{
+ 			confirmPassword.setCustomValidity("");
+ 		}
+ 	
+ 	}
+	function checkEmailUnique(form){
+		//url for the web service
+		url = "[[@{/officers/check_email}]]";
+		
+		/*$("#email") refers to the th:field value of the email field*/
+		officerEmail = $("#email").val(); //get value of the email field in the form
+		officerId = $("#id").val();
+		
+		csrfValue = $("input[name='_csrf']").val();
+		params = {id: officerId, email: officerEmail, _csrf: csrfValue};
+		
+		//$("#modalDialog").modal("show");
+		
+		//if (true) return false;
+		
+		//make ajax call
+		$.post(url, params, function(response){
+			if(response == "OK"){
+				form.submit();
+			}else if(response == "Duplicated"){
+				showModalDialog("Warning","There is another user with the same email " + officerEmail);
+			}else{
+ 				//showModalDialog("Error", "Unknown response from server");
+ 				
+ 				showErrorModal("Unknown response from server");
+ 			}
+		}).fail(function(){
+ 			showModalDialog("Error","Could not connect to the server");
+ 		});
+		return false;
+	}
+	
+	function showModalDialog(title, message){
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message);
+		$("#modalDialog").modal("show");
+	}
+	
+	/*functon for showing error message of the modal dialog*/
+ 	function showErrorModal(message){
+ 	showModalDialog("Error", message);
+ 	}
+</script>
+<script  th:inline="javascript" th:src="@{/js/toastMessage.js}"></script>
+</body>
+</html>
+

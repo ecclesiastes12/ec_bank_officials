@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="fragments :: page_head('Field Officials','none')">
+</head>
+<body class="dashboard-body">
+	<div th:replace="fragments :: header"></div>
+<!--   	<div th:replace="fragments/sidebar"></div> -->
+	<div class="container dashboard-container">
+	<header th:replace="navigation :: header"></header>
+	
+		<div th:if="${districtCode != null && districtCode.size() > 0}">
+		<h2 class="dashboard-title">Electoral Commission Ghana</h2>
+        <h3>[[${districtCode[0].district.name}]]</h3>
+    </div>
+	<section class="section-dashboard">
+		<div class="dashboard-details">
+		<i class="fa-solid fa-users"></i>
+			<h5>Total Users</h5>
+			<span>[[${totalUser}]]</span>
+		</div>
+		<div class="dashboard-details">
+		<i class="fa-solid fa-building-columns"></i>
+		<h5>Total Bank details</h5></div>
+		<div class="dashboard-details">
+		<i class="fa-solid fa-building-flag"></i>
+		<h5>Total District</h5></div>
+	</section>
+	
+		
+	</div>
+	<div th:replace="fragments :: footer"></div>
+	
+	<script>
+	$(document).ready(function(){
+ 		logout("#logoutLink");
+ 	})
+	</script>
+</body>
+</html>

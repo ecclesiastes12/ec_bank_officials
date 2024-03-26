@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: page_head('Users','none')">
+<title>[[${title}]]</title>
+</head>
+<body>
+	<div class="container">
+	<header th:replace="navigation :: header"></header>
+		<h3 class="title">[[${pageTitle}]]</h3>
+
+		<div>
+			<a th:href="@{/districts/new}">
+				<button class="fa-regular fa-user btn btn-hipster"></button>
+			</a>
+			<div th:if="${message != null}" class="alert alert-success">
+				[[${message}]]
+			</div>
+		</div>
+		<div >
+			<table>
+			<thead>
+				<tr >
+					<th>#</th>
+					<th>District Code</th>
+					<th>District Name</th>
+					<th>Region</th>
+					<th>Action</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="district : *{listDistricts}">
+					<td>[[${district.id}]]</td>
+					<td>[[${district.code}]]</td>
+					<td>[[${district.name}]]</td>
+					<td>[[${district.region}]]</td>
+				
+					<td class="table-action">
+						<div>
+							<a class="fa-regular fa-pen-to-square edit" th:href="@{'/districts/edit/' +${district.id}}"></a>
+						</div>
+						<div>
+							<a class="fa-solid fa-trash delete link-delete" 
+							th:href="@{'/districts/delete/' +${district.id}}"
+							th:entityId="${district.id}" 
+							th:districtName ="${district.name}"
+							th:fullName="${district.region}"></a>
+						</div>
+					</td>
+				</tr>
+
+			</tbody>
+		</table>
+		</div>
+	</div>
+		<div class="modal fade text-center" id="confirmModal">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" >Delete Confirmation</h4>
+					<button type="button" class="close" data-bs-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<span id="confirmText"></span>
+				</div>
+				<div class="modal-footer">
+					<a class="btn btn-success" href="" id="yesButton">Yes</a>
+					<button type="button" class="btn btn-danger" data-bs-dismiss="modal">No</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+ 	<script type="text/javascript">
+ 		$(document).ready(function(){
+ 			//logout function call
+ 			logout("#logoutLink");
+ 			
+ 			//delete function
+ 			$(".link-delete").on("click", function(e){
+				e.preventDefault(); /*prevent default behaviour of the form using jQuery*/
+				link = $(this);
+				console.log(link)
+				showDeleteConfirmModal(link, 'district');
+
+			});
+
+ 		});
+ 	
+ 	</script>
+ 	<script th:src="@{/js/common_list.js}"></script>
+</body>
+</html>

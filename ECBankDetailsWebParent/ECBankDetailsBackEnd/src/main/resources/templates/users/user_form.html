@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head th:replace="~{fragments :: page_head('User Form','none')}">
+</head>
+<body>
+	<div class="container">
+	<div class="back-arrow-container">
+		<th:block  sec:authorize="hasAuthority('Admin')">
+			
+		<i class="fa-solid fa-arrow-left"></i>
+			<div ><a th:href="@{/users}" class="moving-circle"></a></div>
+		
+		</th:block>
+		<th:block  sec:authorize="hasAnyAuthority('District_Officer','Returning_Officer')">
+			
+		<i class="fa-solid fa-arrow-left"></i>
+			<div ><a th:href="@{/users/userDistrict}" class="moving-circle"></a></div>
+		
+		</th:block>
+		</div>
+		<h2 class="title">[[${pageTitle}]]</h2>
+		<div th:if="${param.message == 'Conflict'}">
+    <p>Conflict: The data has been updated by another user. Please refresh and try again.</p>
+</div>
+		<form class="form-container" th:action="@{/users/save}" method="post" th:object="${userForm}" 
+		onsubmit="return checkEmailUnique(this);">
+		
+			<input type="hidden" th:field="*{id}"/>
+			
+			<!-- for optimistic locking -->
+			<input type="hidden" th:field="*{version}"/>
+			
+			<div  class="form-row">
+				<div class="form-column">
+					<label class="form-label">Select District</label>
+					<select class="form-select" th:field="*{district}">
+						<th:block  th:each="district : ${listDistricts}">
+							<option th:value="${district.id}">[[${district.name}]]  -- [[${district.region}]]</option>
+						</th:block>
+					</select>
+				</div>
+				
+			</div>
+			<div  class="form-row">
+				<div class="form-column">
+					<label class="form-label">First Name</label> <input type="text"
+						class="form-input"  th:field="*{firstName}" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Last Name</label> <input type="text"
+						class="form-input" th:field="*{lastName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">ID Card</label> <input type="text"
+						class="form-input"  th:field="*{identityCard}" placeholder="Ghana Card or Voter's Id Number" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Email</label> <input type="email"
+						class="form-input"  th:field="*{email}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+				<label class="form-label">Password:</label>
+					<input th:if="${userForm.id == null}" type="password" th:field="*{password}" class="form-control" 
+					  minlength="8" maxlength="20" required="required"
+					  oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"/>
+					  
+					  <input th:if="${userForm.id != null}" type="password" th:field="*{password}" class="form-control" 
+					  placeholder="Leave blank if you don't want to change password" 
+					  minlength="8" maxlength="20" 
+					  oninput="checkPasswordMatch(document.getElementById('confirmPassword'))"/>
+			</div>
+			<div class="form-column">
+				<label class="form-label">Confirm Password:</label>
+					<input type="password" id="confirmPassword"
+					 class="form-control" minlength="8" maxlength="20"
+					 oninput="checkPasswordMatch(this);"/>
+			</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">Phone Number</label> <input type="text"
+						class="form-input"  th:field="*{phoneNumber}" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Status</label> 
+					<div class="statusContainer" ><input type="checkbox"
+						class="form-input userStatusCheckbox"  th:field="*{enabled}" />
+						<span th:text="${userForm.enabled != null && userForm.enabled ? 'Enabled' : 'Disabled'}"></span>
+						
+						</div>
+				</div>
+			</div>
+			
+				
+			<div class="form-row"  th:if="${userForm.id != null}">
+				
+				<div class="form-column" >
+					<label class="form-label">Role</label> 
+					<div class="col-sm-8">
+						<th:block th:each="role : ${listRoles}" >
+							<input type="checkbox" th:field="*{roles}"
+								th:text="${role.name}"
+								th:value="${role.id}"
+								class="m-2"
+							>
+							- <small>[[${role.description}]]</small>
+							<br>
+						</th:block>
+					</div>
+				</div>
+			</div>
+			
+			
+			<div class="btn-block ">
+				<input type="submit" class="btn" value="save" />
+				<button type="button" class="btn">cancel</button>
+			</div>
+			
+		</form>
+	</div>
+	<div class="modal fade text-center" id="modalDialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modalTitle">Warning</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <span id="modalBody"></span>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-close " data-bs-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+//function to check password match
+// 	function checkPasswordMatch(confirmPassword){
+// 		var passwordInput = document.querySelector("input[name='password']");
+// 		if(confirmPassword.value !== passwordInput.value){
+// 			confirmPassword.setCustomValidity("Password do not match!");
+// 		}else{
+// 			confirmPassword.setCustomValidity("");
+// 		}
+	
+// 	}
+
+function checkPasswordMatch(confirmPassword){
+ 		if(confirmPassword.value != $("#password").val()){
+ 			confirmPassword.setCustomValidity("Password do not match!");
+ 		}else{
+ 			confirmPassword.setCustomValidity("");
+ 		}
+ 	
+ 	}
+	function checkEmailUnique(form){
+		//url for the web service
+		url = "[[@{/users/check_email}]]";
+		
+		/*$("#email") refers to the th:field value of the email field*/
+		userEmail = $("#email").val(); //get value of the email field in the form
+		userId = $("#id").val();
+		
+		csrfValue = $("input[name='_csrf']").val();
+		params = {id: userId, email: userEmail, _csrf: csrfValue};
+		
+		//$("#modalDialog").modal("show");
+		
+		//if (true) return false;
+		
+		//make ajax call
+		$.post(url, params, function(response){
+			if(response == "OK"){
+				alert("form id: " + params.id);
+				//form.submit();
+			}else if(response == "Duplicated"){
+				showModalDialog("Warning","There is another user with the same email " + userEmail);
+			}else{
+ 				//showModalDialog("Error", "Unknown response from server");
+ 				
+ 				showErrorModal("Unknown response from server");
+ 			}
+		}).fail(function(){
+ 			showModalDialog("Error","Could not connect to the server");
+ 		});
+		return false;
+	}
+	
+	function showModalDialog(title, message){
+		$("#modalTitle").text(title);
+		$("#modalBody").text(message);
+		$("#modalDialog").modal("show");
+	}
+	
+	
+</script>
+ <script th:src="@{/js/common_form.js}"></script>
+</body>
+</html>
+
+

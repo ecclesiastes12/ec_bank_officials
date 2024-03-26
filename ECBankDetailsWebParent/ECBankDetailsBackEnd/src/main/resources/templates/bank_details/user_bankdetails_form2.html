@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: page_head('User Form','none')}">
+</head>
+<body>
+	<div class="container">
+		<div class="back-arrow-container">
+		<i class="fa-solid fa-arrow-left"></i>
+			<div ><a th:href="@{/bankdetails}" class="moving-circle"></a></div>
+		</div>
+		<h2 class="title">[[${pageTitle}]]</h2>
+		<form id="bankInfoForm" class="form-container" th:action="@{/bankdetails/save}" method="post" th:object="${bankInfo}">
+			
+			<input type="hidden" th:field="*{id}"/>
+			
+			<div  class="form-row">
+				<div class="form-column">
+					<label class="form-label">First Name</label> <input type="text"
+						class="form-input"  th:field="*{firstName}" required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Last Name</label> <input type="text"
+						class="form-input" th:field="*{lastName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+					<label class="form-label">Account Number</label> <input type="text"
+						class="form-input"  th:field="*{accountNumber}"  required="required"/>
+				</div>
+				<div class="form-column">
+					<label class="form-label">Bank Name</label> <input type="text"
+						class="form-input"  th:field="*{bankName}" required="required"/>
+				</div>
+			</div>
+			<div class="form-row">
+				<div class="form-column">
+				<label class="form-label">Bank Branch:</label>
+					<input type="text" th:field="*{branch}" class="form-input"
+					   required="required"/>
+				
+			</div>
+			
+			</div>
+			
+			
+			<div class="btn-block ">
+<!-- 				<input type="submit" class="btn" value="save" /> -->
+				<input type="button" class="btn" id="viewBankInfo" value="save" onclick="grabFormDataAndShowModal('#addModal')"  />
+				<button type="button" class="btn">cancel</button>
+			</div>
+			
+		</form>
+	</div>
+	
+	<div class="modal fade" id="addModal">
+		<!-- modal-xl indicate extra-large modal dialog -->
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content"></div>
+		</div>
+	</div>
+	
+<script type="text/javascript">
+		$(document).ready(function(){
+			
+			//showModalForm("#viewBankInfo","#addModal");  
+			
+
+			    $("#viewBankInfo").click(function () {
+			      grabFormDataAndShowModal("#addModal");
+			    });
+		});
+	
+		function showModalForm(btnLink,modalLinkId){
+			$(btnLink).on("click", function (e) {
+				
+				event.preventDefault();
+				linkDetailURL = $(this).attr("href");
+				
+				 // Extract form data
+		        const formData = $('#bankInfoForm').serialize();
+			
+				 
+		        $('#previewFormContent').html(formData);
+		        
+			$(modalLinkId) //selects the modal dialog
+					.modal("show") //show the modal
+					.find(".modal-content") //finds the element modal-content
+					.load(formData); //Set form data as inner HTML
+			});
+			
+		}
+		
+		function grabFormDataAndShowModal(modalId) {
+		      event.preventDefault(); // Prevent default form submission
+
+		      // Extract form data
+		      const formData = $('#bankInfoForm').serialize();
+
+		      // Display data in modal
+		      $(modalId)
+		        .modal("show")
+		        .find("#previewFormContent")
+		        .html(formData);
+		    }
+	</script>
+</body>
+</html>
