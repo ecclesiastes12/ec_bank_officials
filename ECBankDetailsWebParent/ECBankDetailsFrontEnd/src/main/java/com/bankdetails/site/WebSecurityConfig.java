@@ -40,8 +40,8 @@ public class WebSecurityConfig {
 		
 		//http.csrf((csrf) -> csrf.disable());
 		http.authorizeHttpRequests((authz) -> authz
-			
-			.requestMatchers("/officers/new").permitAll()
+			.requestMatchers("/css/**", "/webjars/**","/js/**","/favicon.ico","/images/**").permitAll()
+			.requestMatchers("/officers/new","/officers/check_unique_email","/officers/save").permitAll()
 			.requestMatchers("/officers/index","/officers/bank").authenticated()
 			.anyRequest().authenticated()
 				

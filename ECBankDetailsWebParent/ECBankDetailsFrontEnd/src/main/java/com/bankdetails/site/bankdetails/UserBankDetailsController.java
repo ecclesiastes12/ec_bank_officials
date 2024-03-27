@@ -1,12 +1,9 @@
 package com.bankdetails.site.bankdetails;
 
-import java.util.List;
-
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,29 +12,27 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import com.bankdetails.entity.District;
 import com.bankdetails.entity.Officer;
 import com.bankdetails.entity.UserBankDetails;
-import com.bankdetails.site.district.DistrictNotFoundException;
 import com.bankdetails.site.district.DistrictService;
 import com.bankdetails.site.district.login.OfficerLoginDetails;
-import com.bankdetails.site.district.officers.OfficerNotFoundException;
-import com.bankdetails.site.district.officers.OfficerService;
+import com.bankdetails.site.fieldofficer.OfficerServiceImpl;
 
 @Controller
 @RequestMapping("/bankinfo")
 public class UserBankDetailsController {
 
 	private UserBankDetailsServiceImpl bankDetailsService;
-	private OfficerService officerService;
+	private OfficerServiceImpl officerService;
 	private DistrictService districtService;
 	
-	public UserBankDetailsController(UserBankDetailsServiceImpl bankDetailsService,
-			OfficerService officerService,
+
+	public UserBankDetailsController(UserBankDetailsServiceImpl bankDetailsService, OfficerServiceImpl officerService,
 			DistrictService districtService) {
 		this.bankDetailsService = bankDetailsService;
 		this.officerService = officerService;
 		this.districtService = districtService;
 	}
-	
-	
+
+
 	@GetMapping
 	public String listBankDetails(Model model,Authentication auth) {
 		OfficerLoginDetails loginDetails = (OfficerLoginDetails) auth.getPrincipal();

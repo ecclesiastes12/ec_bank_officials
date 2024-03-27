@@ -13,7 +13,7 @@ import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 
 @Entity
-@Table(name = "field_officers")
+@Table(name = "officers")
 public class Officer {
 
 	
@@ -48,11 +48,11 @@ public class Officer {
     private District district;
 	 
 	
-	/*
-	 * @ManyToOne
-	 * 
-	 * @JoinColumn(name = "officer_role_id") private OfficerRole officerRole;
-	 */
+	
+	  @ManyToOne
+	  
+	  @JoinColumn(name = "officer_role_id") private OfficerRole officerRole;
+	 
 	public Officer() {}
 	
 	
@@ -137,13 +137,13 @@ public class Officer {
 		this.district = district;
 	}
 	
-//	public OfficerRole getOfficerRole() {
-//		return officerRole;
-//	}
-//
-//	public void setOfficerRole(OfficerRole officerRole) {
-//		this.officerRole = officerRole;
-//	}
+	public OfficerRole getOfficerRole() {
+		return officerRole;
+	}
+
+	public void setOfficerRole(OfficerRole officerRole) {
+		this.officerRole = officerRole;
+	}
 
 	
 	//method that get user full name

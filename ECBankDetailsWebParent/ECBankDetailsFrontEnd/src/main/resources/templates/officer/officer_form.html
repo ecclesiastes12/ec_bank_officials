@@ -24,7 +24,14 @@
 							</select>
 						</div>
 						
-						
+						<div class="form-column">
+							<label class="form-label">Select Role</label>
+							<select class="form-input " th:field="*{officerRole}">
+								<th:block  th:each="officerRoles : ${listOfficerRoles}">
+									<option th:value="${officerRoles.id}">[[${officerRoles.name}]]</option>
+								</th:block>
+							</select>
+						</div>
 					</div>
 					
 					<div class="form-row">
@@ -121,39 +128,51 @@
 	        
 	        // Get values of email and id fields from the form
 	        var officerEmail = $("#email").val();
-	        var officerId = $("#id").val();
+	       // var officerId = $("#id").val();
 
 	        // Get CSRF token value
 	        var csrfValue = $("input[name='_csrf']").val();
 
 	        // Construct parameters for the request
-	        var params = {id: officerId, email: officerEmail, _csrf: csrfValue};
+	        var params = {email: officerEmail, _csrf: csrfValue};
 
 	        // Make AJAX call
-	       $.post(url,params,function(response){
-	    	   
-	    		 if(response == "OK"){
-	    			 alert(response);
-	    		 }
-	    	  
-	       })
-
-	        return false;
-	    }
+	        $.post(url, params, function(response){
+				if(response == "OK"){
+					form.submit();
+				}else if(response == "Duplicated"){
+				  //  showModalDialog("Warning","There is another officer having the email " + officerEmail);
+				  
+				  showWarningModal("There is another officer having the email " + officerEmail);
+				}else{
+					//showModalDialog("Error", "Unknown response from server");
+					
+					showErrorModal("Unknown response from server");
+				}
+			}).fail(function(){
+				showModalDialog("Error","Could not connect to the server");
+			});
+			return false;
+		}
 		
-	    function showModalDialog(title, message){
-	        $("#modalTitle").text(title);
-	        $("#modalBody").text(message);
-	        $("#modalDialog").modal("show");
-	    }
+		function showModalDialog(title, message){
+			$("#modalTitle").text(title);
+			$("#modalBody").text(message);
+			$("#modalDialog").modal("show");
+		}
+		
+		/*functon for showing error message of the modal dialog*/
+	 	function showErrorModal(message){
+	 	showModalDialog("Error", message);
+	 	}
 
-	    function showErrorModal(message){
-	        showModalDialog("Error", message);
-	    }
+	     
+	    
+	  
 	</script>
 	
 	
-	<script  th:inline="javascript" th:src="@{/js/toastMessage.js}"></script>
+	
 	<!-- <script  th:inline="javascript" th:src="@{/js/common_list.js}"></script>
 	<script  th:inline="javascript" th:src="@{/js/common_form.js}"></script> -->
 </body>
